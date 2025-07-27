@@ -4,10 +4,11 @@ import next from 'next'
 import { Server } from 'socket.io'
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = 'localhost'
-const port = 3000
+const hostname = dev ? 'localhost' : '0.0.0.0'
+const port = parseInt(process.env.PORT || '3000', 10)
 
-const app = next({ dev, hostname, port })
+// Don't pass port to Next.js app - let it handle its own routing
+const app = next({ dev })
 const handler = app.getRequestHandler()
 
 interface User {
@@ -105,8 +106,7 @@ app.prepare().then(() => {
     })
   })
 
-  httpServer.listen(port, (err?: Error | undefined) => {
-    if (err) throw err
+  httpServer.listen(port, hostname, () => {
     console.log(`> Ready on http://${hostname}:${port}`)
     console.log('> Socket.io server is running')
   })
