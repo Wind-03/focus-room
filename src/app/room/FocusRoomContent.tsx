@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useFocusRoom } from "../hooks/useRoom";
 import { v4 as uuidv4 } from "uuid";
 import { getRandomQuote } from "./quotes";
+import { Toaster } from "react-hot-toast";
+import notify from "../../../notify";
 
 export default function FocusRoom() {
   const searchParams = useSearchParams();
@@ -86,7 +88,7 @@ export default function FocusRoom() {
   return (
     <div className="min-h-screen animate-gradient-diagonal bg-gradient-to-br from-slate-900 via-gray-900 to-blue-950 p-8">
       {/* Header */}
-
+      <Toaster />
       <div className="w-11/12 mx-auto max-screen-2xl">
         <div className="flex justify-between items-start lg:items-center">
           <span>
@@ -223,15 +225,27 @@ export default function FocusRoom() {
               ) : (
                 <div className="flex items-center gap-x-3">
                   <button
-                  onClick={()=> resetTimer()}
-                  disabled={users.length > 1}
+                  onClick={()=> {
+                    if (users.length < 1) {
+                      resetTimer();
+                    }else{
+                      notify("warning", "You can't reset the timer when other people are in the room.");
+                    }
+                  }}
+                  // disabled={users.length > 1}
                   className="px-8 py-3 bg-gray-500 rounded-lg text-white font-semibold transition-colors duration-300"
                 >
-                  Stop
+                  Reset
                 </button>
                 <button
-                  onClick={()=> stopTimer()}
-                  disabled={users.length > 1}
+                  onClick={()=> {
+                    if (users.length < 1) {
+                      stopTimer();
+                    }else{
+                      notify("warning", "You can't reset the timer when other people are in the room.");
+                    }
+                  }}
+                  // disabled={users.length > 1}
                   className="px-8 py-3 bg-red-600/80 hover:bg-red-600 rounded-lg text-white font-semibold transition-colors duration-300"
                 >
                   Stop
