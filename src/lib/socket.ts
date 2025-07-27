@@ -1,5 +1,6 @@
 // socket.ts
 import { io, Socket } from 'socket.io-client'
+const URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000';
 
 // TypeScript interfaces for type safety
 export interface User {
@@ -36,7 +37,7 @@ let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null
 export const getSocket = (): Socket<ServerToClientEvents, ClientToServerEvents> => {
   if (!socket) {
     // Connect to your custom server
-    socket = io('http://localhost:3000', {
+    socket = io(URL, {
       // Automatically try to reconnect if connection is lost
       autoConnect: true,
       // Retry connection attempts
